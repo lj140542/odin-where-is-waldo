@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --test: #cccccc;
+    --background: 0 0% 100%;
+    --foreground: 240 6% 24%;
+
+    --card: 0 0% 93%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 44 17% 31%;
+    --popover-foreground: 0 0% 93%;
+
+    --primary: 0 0% 93%;
+    --primary-foreground: 240 6% 24%;
+
+    --secondary: 240 6% 24%;
+    --secondary-foreground: 240 5% 18%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 0 0% 93%;
+
+    --accent: 226 77% 56%;
+    --accent-foreground: 77 14% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 77 14% 10%;
+    --input: 77 14% 10% / 50%;
+    --ring: 77 14% 10%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --test: hsl(240, 5%, 18%);
+    --background: 240 5% 18%;
+    --foreground: 0 0% 93%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 43 17% 71%;
+    --popover-foreground: 77 14% 10%;
+
+    --primary: 240 6% 24%;
+    --primary-foreground: 0 0% 93%;
+
+    --secondary: 0 0% 93%;
+    --secondary-foreground: 240 5% 18%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 0 0% 20%;
+
+    --accent: 225 76% 82%;
+    --accent-foreground: 77 14% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 100%;
+    --input: 0 0% 100% / 50%;
+    --ring: 77 14% 10%;
+  }
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  main {
+    min-height: calc(100vh - 80px);
+  }
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: 500;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+}
