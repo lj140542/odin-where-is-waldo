@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
 const Avatar = (({ className, ...props }) => (
