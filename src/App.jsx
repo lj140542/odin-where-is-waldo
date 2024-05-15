@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className='flex flex-col w-full items-center'>
+      <main className='flex flex-col w-full items-center gap-8'>
         <PlayBoard />
         <ScoreBoard />
       </main>
