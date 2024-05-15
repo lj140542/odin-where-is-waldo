@@ -26,28 +26,46 @@ export default function PlayBoard() {
   }
   const getIsAllFound = (characters) => {
     let ret = true;
-    characters.forEach(character => {
+    characters.every(character => {
       ret = character.found;
       return ret; // break the loop if false
     })
     return ret;
   }
 
-  const gameStart = () => {
-    // TODO : SEND START TO SERVER 
-    // -> get back a httpOnly cookie containing the start_time
-    setStarted(true);
-    start(); // starts the displayed timer
+  const gameStart = async () => {
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/start`, { mode: "cors", method: "POST", credentials: "include", })
+      .then(response => {
+        if (response.ok) return response.json();
+        else return response;
+      })
+      .catch(error => {
+        console.error(error);
+        return error;
+      })
+
+    if (result.token) {
+      setStarted(true);
+      start(); // starts the displayed timer
+    }
   }
-  const gameEnd = () => {
+  const gameEnd = async () => {
     pause();
 
-    // TODO : SEND END TO SERVER 
-    // -> send the httpOnly cookie containing the start_time
-    // -> get back a httpOnly cookie containing the score (time between start_time and end_time)
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/end`, { mode: "cors", method: "POST", credentials: "include", })
+      .then(response => {
+        if (response.ok) return response.json();
+        else return false;
+      })
+      .catch(error => {
+        console.error(error);
+        return false;
+      });
 
-    // Display the form to get the user name for the leader board
-    setFinished(true);
+    if (result.token) {
+      // Display the form to get the user name for the leader board
+      setFinished(true);
+    }
   }
 
   const handleHover = (e) => {
@@ -58,12 +76,33 @@ export default function PlayBoard() {
     if (coord && (Math.abs(x - coord.x) > threshold || Math.abs(y - coord.y) > threshold))
       setCoord(null);
   }
-  const handleSelection = (e, selectionIndex) => {
+  const handleSelection = async (e, selectionIndex) => {
     // Handles the character selection after clicking on the image
 
-    // TODO : SEND SELECTION TO SERVER
-    // send the character selected and the relative coord
-    const isFound = true;
+    const formData = {
+      charId: "" + selectionIndex,
+      coord: {
+        x: "" + coord.relativeX,
+        y: "" + coord.relativeY
+      }
+    }
+
+    const isFound = await fetch(`${import.meta.env.VITE_API_URL}/find`, {
+      mode: "cors", method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json", },
+      body: JSON.stringify(formData),
+    })
+      .then(response => {
+        if (response.ok) return response.json();
+        else return false;
+      })
+      .then(response => {
+        return response.result;
+      })
+      .catch(error => {
+        console.error(error);
+        return false;
+      });
 
     // flag the selected character as found
     const newCharacter = characters;
@@ -76,20 +115,33 @@ export default function PlayBoard() {
     setCoord(null);
 
     // Handle the end of the game if all characters are found
-    if (getIsAllFound(newCharacter))
+    if (getIsAllFound(newCharacter)) {
       gameEnd()
+    }
   }
-  const handleScore = (e) => {
+  const handleScore = async (e) => {
     e.preventDefault()
     const username = e.target.username.value;
 
     if (username) {
-      // TODO : SEND USER_NAME TO SERVER 
-      // -> send the httpOnly cookie containing the score + the name provided 
-      // -> get back a httpOnly cookie to erase the previous one, with a 2s expiration
+      const result = await fetch(`${import.meta.env.VITE_API_URL}/save`, {
+        mode: "cors", method: "POST", credentials: "include",
+        headers: { "Content-Type": "application/json", },
+        body: JSON.stringify({ username }),
+      })
+        .then(response => {
+          if (response.ok) return response.json();
+          else return false;
+        })
+        .catch(error => {
+          console.error(error);
+          return false;
+        });
 
-      // Refresh the webpage to allow the player to replay and to refresh the leaderboard
-      window.location.reload();
+      if (result.token) {
+        // Refresh the webpage to allow the player to replay and to refresh the leaderboard
+        window.location.reload();
+      }
     }
   }
 
